@@ -1,9 +1,17 @@
 class ClinicsController < ApplicationController
   before_action :set_clinic, only: %i[ show edit update destroy ]
-
+  # before_action :authenticate_user!
+  ROWS_PER_PAGE = 10
   # GET /clinics or /clinics.json
   def index
-    @clinics = Clinic.all
+    @current_page = params.fetch(:current_page, 0).to_i
+    if params[:name].present?
+      @clinics = ClinicSearchQuery.call(params).offset(@current_page * ROWS_PER_PAGE).limit(ROWS_PER_PAGE)
+    else
+      @clinics = ClinicsQuery.call(params).offset(@current_page * ROWS_PER_PAGE).limit(ROWS_PER_PAGE)
+    end
+
+
   end
 
   # GET /clinics/1 or /clinics/1.json
@@ -22,7 +30,7 @@ class ClinicsController < ApplicationController
   # POST /clinics or /clinics.json
   def create
     @clinic = Clinic.new(clinic_params)
-
+    @clinic.avatar.attach(params[:clinic][:avatar])
     respond_to do |format|
       if @clinic.save
         format.html { redirect_to clinic_url(@clinic), notice: "Clinic was successfully created." }
@@ -65,6 +73,6 @@ class ClinicsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def clinic_params
-      params.require(:clinic).permit(:name, :owner)
+      params.require(:clinic).permit(:name, :owner, :year, :facility_type, :city, :mortality)
     end
 end

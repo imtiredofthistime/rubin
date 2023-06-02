@@ -15,7 +15,7 @@ namespace :parse do
         rows.each do |row|
           clinic = Clinic.new
           clinic.name = row['Facility.Name']
-          clinic.address = row['Facility.City']
+          clinic.city = row['Facility.City']
           clinic.facility_type = row['Facility.Type']
           clinic.city = row['Facility.City']
           clinic.mortality = row['Rating.Mortality']

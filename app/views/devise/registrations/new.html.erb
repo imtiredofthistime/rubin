@@ -1,31 +1,10 @@
 <h2>Sign up</h2>
 
+<%#= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |form| %>
 <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |form| %>
   <%= render "devise/shared/error_messages", resource: resource %>
 
-
-
-  <div>
-    <%= form.label :name, style: "display: block", class: 'field' %>
-    <div class="control">
-      <%= form.text_field :name, class: 'input' %>
-    </div>
-  </div>
-
-  <div>
-    <%= form.label :surname, style: "display: block", class: 'field' %>
-    <div class="control">
-      <%= form.text_field :surname, class: 'input' %>
-    </div>
-  </div>
-
-  <div>
-    <%= form.label :patronym, style: "display: block", class: 'field' %>
-    <div class="control">
-      <%= form.text_field :patronym, class: 'input', class: 'input' %>
-    </div>
-  </div>
-
+x
   <div>
     <% if @user.avatar.attached? %>
       <%= image_tag @user.avatar, style: "width: 200px; display:block" %>

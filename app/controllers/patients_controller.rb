@@ -1,9 +1,22 @@
 class PatientsController < ApplicationController
+  # before_action :authenticate_user!
   before_action :set_patient, only: %i[ show edit update destroy ]
-
+  ROWS_PER_PAGE = 10
   # GET /patients or /patients.json
   def index
-    @patients = Patient.all
+    # @patients = Patient.all
+    @current_page =  params.fetch(:current_page, 0).to_i
+    if params[:name].present?
+      @patients = PatientSearchQuery.call(params)
+    else
+      @patients = Patient.offset(@current_page*ROWS_PER_PAGE).limit(ROWS_PER_PAGE)
+    end
+
+  end
+
+  # Шукати за ім'ям пацієнта, ObjectQuery
+  def searchByNames
+    @clinics = PatientSearchQuery.call(params[:name])
   end
 
   # GET /patients/1 or /patients/1.json
@@ -65,6 +78,6 @@ class PatientsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def patient_params
-      params.require(:patient).permit(:name, :email)
+      params.require(:patient).permit(:name, :email, :surname, :email, :age)
     end
 end

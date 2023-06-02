@@ -1,9 +1,14 @@
 class SpecialtiesController < ApplicationController
+  # before_action :authenticate_user!
   before_action :set_specialty, only: %i[ show edit update destroy ]
+  ROWS_PER_PAGE = 10
 
   # GET /specialties or /specialties.json
   def index
-    @specialties = Specialty.all
+    @page = params.fetch(:page, 0).to_i
+    @specialties = Specialty.offset(@page*ROWS_PER_PAGE).limit(ROWS_PER_PAGE)
+
+
   end
 
   # GET /specialties/1 or /specialties/1.json

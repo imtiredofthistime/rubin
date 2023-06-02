@@ -9,8 +9,9 @@ gem "rails", "~> 7.0.5"
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 
-# Use sqlite3 as the database for Active Record
-gem "sqlite3", "~> 1.4"
+# Use POSTGRES as the database for Active Record
+# gem "sqlite3", "~> 1.4"
+gem 'pg'
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", "~> 5.0"
@@ -49,14 +50,31 @@ gem "bootsnap", require: false
 gem 'pry'
 # Lab 2
 gem 'faker'
+# Lab 3
+gem 'devise'
 
-gem 'pg'
+gem 'kaminari'
+# gem 'activeadmin'
 
 # Use Sass to process CSS
 # gem "sassc-rails"
+gem 'sass'
+gem 'sassc'
+
+gem 'activeadmin'
+gem 'cancancan'
+gem 'draper'
+gem 'pundit'
+gem 'sassc'
+gem 'activeadmin_blaze_theme'
+
+gem 'nokogiri'
+gem 'open-uri'
+gem 'faker'
+gem 'prawn'
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
-# gem "image_processing", "~> 1.2"
+gem "image_processing", "~> 1.2"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

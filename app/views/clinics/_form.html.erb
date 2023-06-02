@@ -21,6 +21,15 @@
     <%= form.text_field :owner %>
   </div>
 
+<div>
+  <% if clinic.avatar.attached? %>
+      <%= image_tag clinic.avatar, style: "width: 200px; display:block" %>
+    <% end %>
+  <%= form.label :avatar, style: "display: block", class: 'field' %>
+  <div class="control">
+    <%= form.file_field :avatar, class: 'input', id: 'image' %>
+  </div>
+</div>
   <div>
     <%= form.submit %>
   </div>

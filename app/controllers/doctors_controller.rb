@@ -1,13 +1,16 @@
 class DoctorsController < ApplicationController
+  # before_action :authenticate_user!
   before_action :set_doctor, only: %i[ show edit update destroy ]
-
+  ROWS_PER_PAGE = 10
   # GET /doctors or /doctors.json
   def index
-    @doctors = Doctor.all
+    @page = params.fetch(:page, 0).to_i
+    @doctors = Doctor.offset(@page*ROWS_PER_PAGE).limit(ROWS_PER_PAGE)
   end
 
   # GET /doctors/1 or /doctors/1.json
   def show
+
   end
 
   # GET /doctors/new
@@ -60,11 +63,20 @@ class DoctorsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_doctor
-      @doctor = Doctor.find(params[:id])
+      # check if id is number
+      # if not, then search by name
+      # if not, then search by surname
+      id = params[:id]
+      if id.is_a? Numeric
+        @doctor = Doctor.find(params[:id])
+      else
+        surname_and_name = params[:id].sub('space', ' ').split('-')
+        @doctor = Doctor.where(surname: surname_and_name[0], name: surname_and_name[1]).first
+      end
     end
 
     # Only allow a list of trusted parameters through.
     def doctor_params
-      params.require(:doctor).permit(:name, :surname, :department_id, :specialty=reference)
+      params.require(:doctor).permit(:name, :surname, :department_id, :specialty_id)
     end
 end

@@ -1,9 +1,12 @@
 class DoctorPatientsController < ApplicationController
+  # before_action :authenticate_user!
   before_action :set_doctor_patient, only: %i[ show edit update destroy ]
+  ROWS_PER_PAGE = 10
 
   # GET /doctor_patients or /doctor_patients.json
   def index
-    @doctor_patients = DoctorPatient.all
+    @page = params.fetch(:page, 0).to_i
+    @doctor_patients = DoctorPatient.offset(@page*ROWS_PER_PAGE).limit(ROWS_PER_PAGE)
   end
 
   # GET /doctor_patients/1 or /doctor_patients/1.json

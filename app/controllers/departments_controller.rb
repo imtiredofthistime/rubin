@@ -1,9 +1,12 @@
 class DepartmentsController < ApplicationController
+  # before_action :authenticate_user!
   before_action :set_department, only: %i[ show edit update destroy ]
+  ROWS_PER_PAGE = 10
 
   # GET /departments or /departments.json
   def index
-    @departments = Department.all
+    @page = params.fetch(:page, 0).to_i
+    @departments = Department.offset(@page*ROWS_PER_PAGE).limit(ROWS_PER_PAGE)
   end
 
   # GET /departments/1 or /departments/1.json

@@ -1,14 +1,77 @@
 <p style="color: green"><%= notice %></p>
+<%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
 
-<h1>Patients</h1>
-
-<div id="patients">
-  <% @patients.each do |patient| %>
-    <%= render patient %>
-    <p>
-      <%= link_to "Show this patient", patient %>
-    </p>
-  <% end %>
+<p style="color: lightseagreen"><%= notice %></p>
+<div class="content has-text-centered">
+  <h1 class="h1">Patients</h1>
+  <title>Patients </title>
 </div>
 
-<%= link_to "New patient", new_patient_path %>
+<div class="container is-widescreen has-text-centered is-center ">
+
+  <% column_names = @patients.column_names %>
+  <div class="table-container is-align-items-center is-align-content-center is-justify-content-center is-centered" id="patients">
+
+    <%= form_with(url: patients_path, method: :get) do |form| %>
+    <%= form.text_field :name, placeholder: "Search by (sur)name or age" %>
+    <%= form.submit "Search", class: "button is-primary" %>
+    <% end %>
+
+    <table class="table  is-centered">
+      <thead>
+      <tr>
+        <% column_names.each do |column_name| %>
+          <td><%= column_name.humanize %></td>
+        <% end %>
+        <td>Doctors</td>
+        <td>Action</td>
+      </tr>
+
+      </thead>
+      <tbody>
+
+      <% @patients.each do |patient| %>
+        <tr>
+          <% column_names.each do |column| %>
+            <td><%= patient.send(column) %></td>
+          <% end %>
+          <td>
+            <% doctors = Doctor.where(id: DoctorPatient.where(patient_id: patient.id)) %>
+            <% if doctors != nil %>
+              <% doctors.each do |doctor| %>
+                <%= link_to doctor.name, doctors_url + '/' + doctor.surname.sub(' ', 'space') + '-' + doctor.name.sub(' ', 'space') %>
+              <% end %>
+            <% end %>
+          </td>
+          <td><%= link_to "Show this patient", patient %></td>
+        </tr>
+
+      <% end %>
+      </tbody>
+    </table>
+
+        <div>
+    <% if @current_page != 0 %>
+    <%= link_to "Previous page", patients_path(current_page: @current_page - 1), { class: "button" } %>
+    <% end %>
+    <% @all = Patient.all%>
+    <%if (@current_page+1)*10 < @all.length() %>
+    <%= link_to "Next page", patients_path(current_page: @current_page + 1), { class: "button" } %>
+    <% end %>
+  </div>
+</div>
+</div>
+
+<%= link_to "New patient", new_patient_path, { class: "button" } %>
+<!--<h1>Patients</h1>-->
+
+<!--<div id="patients">-->
+<%# @patients.each do |patient| %>
+<%#= render patient %>
+<!--    <p>-->
+<%#= link_to "Show this patient", patient %>
+<!--    </p>-->
+<%# end %>
+<!--</div>-->
+
+<%#= link_to "New patient", new_patient_path %>

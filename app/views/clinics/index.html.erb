@@ -1,14 +1,63 @@
 <p style="color: green"><%= notice %></p>
-
-<h1>Clinics</h1>
-
-<div id="clinics">
-  <% @clinics.each do |clinic| %>
-    <%= render clinic %>
-    <p>
-      <%= link_to "Show this clinic", clinic %>
-    </p>
-  <% end %>
+<div class="content has-text-centered">
+  <h1 class="h1">Clinics</h1>
+  <title>Clinics </title>
 </div>
+<%= link_to "New clinic", new_clinic_path, { class: "button" } %>
+<div class="container is-widescreen has-text-centered is-center ">
+  <% column_names = @clinics.column_names %>
+  <div class="table-container is-align-items-center is-align-content-center is-justify-content-center is-centered" id="clinics">
 
-<%= link_to "New clinic", new_clinic_path %>
+    <%= form_with(url: clinics_path, method: :get) do |form| %>
+      <%= form.text_field :name, placeholder: "Search by name" %>
+      <%= form.submit "Search", class: "button is-primary" %>
+    <% end %>
+
+    <table class="table is-centered">
+      <thead>
+      <tr>
+        <% column_names.each do |column_name| %>
+          <td><%= column_name.humanize %></td>
+        <% end %>
+        <td>Amount of departments</td>
+        <td>Amount of doctors</td>
+        <td>Action</td>
+        <td>Avatar</td>
+      </tr>
+      </thead>
+      <tbody>
+
+      <% @clinics.each do |clinic| %>
+        <tr>
+          <% column_names.each do |column| %>
+            <td><%= clinic.send(column) %></td>
+          <% end %>
+          <td><%= clinic.departments.count %></td>
+          <td><%= Doctor.where(department_id: clinic.departments).length %></td>
+          <td><%= link_to "Show this clinic", clinic %>
+            <%= link_to "Download PDF", downloadAll_path(id: clinic.id) %>
+          </td>
+          <td>
+
+            <% if clinic.avatar.attached? %>
+              <%= image_tag clinic.avatar, style: "height: 100px; width: 200px; display:block" %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+    <div>
+      <% if @current_page != 0 %>
+        <%= link_to "Previous page", clinics_path(current_page: @current_page - 1), { class: "button" } %>
+      <% end %>
+      <% @all = Clinic.all %>
+      <% if (@current_page + 1) * 10 < @all.length() %>
+        <%= link_to "Next page", clinics_path(current_page: @current_page + 1), { class: "button" } %>
+      <% end %>
+    </div>
+  </div>
+  <%= link_to "Download PDF", download_url, { class: "button" } %>
+  <%= link_to "Download CSV", downloadCsv_url, { class: "button" } %>
+</div>
+</div>

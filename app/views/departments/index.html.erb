@@ -1,14 +1,59 @@
 <p style="color: green"><%= notice %></p>
-
-<h1>Departments</h1>
-
-<div id="departments">
-  <% @departments.each do |department| %>
-    <%= render department %>
-    <p>
-      <%= link_to "Show this department", department %>
-    </p>
-  <% end %>
+<div class="content has-text-centered">
+  <h1 class="h1">Departments</h1>
+  <title> Departments </title>
 </div>
 
-<%= link_to "New department", new_department_path %>
+<div class="container is-widescreen has-text-centered is-center ">
+
+  <% column_names = @departments.column_names %>
+  <div class="table-container is-align-items-center is-align-content-center is-justify-content-center is-centered" id="departments">
+    <table class="table  is-centered">
+      <thead>
+      <tr>
+        <% column_names.each do |column_name| %>
+          <td><%= column_name.humanize %></td>
+        <% end %>
+        <td>Action</td>
+      </tr>
+
+      </thead>
+      <tbody>
+
+      <% @departments.each do |department| %>
+        <tr>
+          <% column_names.each do |column| %>
+            <td><%= department.send(column) %></td>
+          <% end %>
+          <td><%= link_to "Show this department", department %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+    <div>
+      <% if @page != 0 %>
+        <%= link_to "Previous page", departments_path(page: @page - 1), { class: "button is-warning" } %>
+      <% end %>
+      <% @all = Department.all%>
+      <% if (@page+1)*10 < @all.length() %>
+        <%= link_to "Next page", departments_path(page: @page + 1), { class: "button is-primary" } %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<%= link_to "New department", new_department_path, { class: "button" } %>
+<!--<p style="color: green"><%#= notice %></p>-->
+
+<!--<h1>Departments</h1>-->
+
+<!--<div id="departments">-->
+  <%# @departments.each do |department| %>
+    <%#= render department %>
+<!--    <p>-->
+      <%#= link_to "Show this department", department %>
+<!--    </p>-->
+  <%# end %>
+<!--</div>-->
+
+<%#= link_to "New department", new_department_path %>

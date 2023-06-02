@@ -1,14 +1,47 @@
 <p style="color: green"><%= notice %></p>
 
-<h1>Doctor patients</h1>
+<p style="color: lightseagreen"><%= notice %></p>
+<div class="content has-text-centered">
+  <h1 class="h1">Doctor patient</h1>
+  <title> Doctor patient </title>
+</div>
 
-<div id="doctor_patients">
-  <% @doctor_patients.each do |doctor_patient| %>
-    <%= render doctor_patient %>
-    <p>
-      <%= link_to "Show this doctor patient", doctor_patient %>
-    </p>
-  <% end %>
+<div class="container is-widescreen has-text-centered is-center ">
+
+  <% column_names = @doctor_patients.column_names %>
+  <div class="table-container is-align-items-center is-align-content-center is-justify-content-center is-centered" id="doctor_patients">
+    <table class="table  is-centered">
+      <thead>
+      <tr>
+        <% column_names.each do |column_name| %>
+          <td><%= column_name.humanize %></td>
+        <% end %>
+        <td>Action</td>
+      </tr>
+
+      </thead>
+      <tbody>
+
+      <% @doctor_patients.each do |dp| %>
+        <tr>
+          <% column_names.each do |column| %>
+            <td><%= dp.send(column) %></td>
+          <% end %>
+          <td><%= link_to "Show this doctor_patient", dp %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+    <div>
+      <% if @page != 0 %>
+        <%= link_to "Previous page", doctor_patients_path(page: @page - 1), { class: "button" } %>
+      <% end %>
+      <% @all = DoctorPatient.all%>
+      <% if (@page+1)*10 < @all.length() %>
+        <%= link_to "Next page", doctor_patients_path(page: @page + 1), { class: "button" } %>
+      <% end %>
+    </div>
+  </div>
 </div>
 
 <%= link_to "New doctor patient", new_doctor_patient_path %>

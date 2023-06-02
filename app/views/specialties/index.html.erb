@@ -2,13 +2,48 @@
 
 <h1>Specialties</h1>
 
-<div id="specialties">
-  <% @specialties.each do |specialty| %>
-    <%= render specialty %>
-    <p>
-      <%= link_to "Show this specialty", specialty %>
-    </p>
+<!--<div id="specialties">-->
+  <%# @specialties.each do |specialty| %>
+    <%#= render specialty %>
+<!--    <p>-->
+      <%#= link_to "Show this specialty", specialty %>
+<!--    </p>-->
+  <%# end %>
+<!--</div>-->
+<div class="table-container is-align-items-center is-align-content-center is-justify-content-center is-centered" id="specialties">
+  <table class="table  is-centered">
+    <thead>
+    <tr>
+      <% column_names = @specialties.column_names %>
+      <% column_names.each do |column_name| %>
+        <td><%= column_name.humanize %></td>
+      <% end %>
+      <td>Action</td>
+    </tr>
+
+    </thead>
+    <tbody>
+
+    <% @specialties.each do |specialty| %>
+      <tr>
+        <% column_names.each do |column| %>
+          <td><%= specialty.send(column) %></td>
+        <% end %>
+        <td><%= link_to "Show this department", specialty %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+
+</div>
+<div>
+  <% if @page != 0 %>
+    <%= link_to "Previous page", specialties_path(page: @page - 1), { class: "button is-warning" } %>
+  <% end %>
+  <% @all = Specialty.all%>
+  <% if (@page+1)*10 < @all.length() %>
+    <%= link_to "Next page", specialties_path(page: @page + 1), { class: "button is-primary" } %>
   <% end %>
 </div>
 
-<%= link_to "New specialty", new_specialty_path %>
+<%= link_to "New specialty", new_specialty_path, class: 'button is-link ' %>
